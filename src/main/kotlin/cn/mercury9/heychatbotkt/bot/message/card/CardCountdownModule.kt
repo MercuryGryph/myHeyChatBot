@@ -11,6 +11,7 @@ data class CardCountdownModule(
     val mode: CardCountdownMode,
 ): CardMessageModule()
 
+@Suppress("Unused")
 @Serializable
 enum class CardCountdownMode {
     @SerialName("default")

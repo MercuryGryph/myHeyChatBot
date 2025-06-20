@@ -21,6 +21,7 @@ class CardImagesBuilder(
     fun build() = CardImagesModule(urls)
 }
 
+@Suppress("Unused")
 @HeyCardDsl
 fun CardDataBuilder.images(
     builder: CardImagesBuilder.() -> Unit

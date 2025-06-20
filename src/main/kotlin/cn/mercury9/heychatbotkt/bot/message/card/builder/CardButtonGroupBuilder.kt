@@ -1,3 +1,5 @@
+@file:Suppress("Unused")
+
 package cn.mercury9.heychatbotkt.bot.message.card.builder
 
 import cn.mercury9.heychatbotkt.bot.message.card.CardButton

@@ -1,5 +1,6 @@
 package cn.mercury9.heychatbotkt.bot.command
 
+@Suppress("Unused")
 enum class CommandOptionType(val id: Int) {
     String(3),
     Number(4),

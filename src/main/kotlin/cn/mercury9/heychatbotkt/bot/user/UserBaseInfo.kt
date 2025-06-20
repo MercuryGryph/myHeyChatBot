@@ -22,5 +22,5 @@ data class UserBaseInfo(
 
     val tag: Tag? = null,
 
-    val medals: Array<Medals> = emptyArray(),
+    val medals: List<Medals> = emptyList(),
 )

@@ -2,6 +2,7 @@ package cn.mercury9.heychatbotkt.bot.channel
 
 import kotlinx.serialization.Serializable
 
+@Suppress("Unused")
 @Serializable
 enum class ChannelType {
     /**语音频道**/

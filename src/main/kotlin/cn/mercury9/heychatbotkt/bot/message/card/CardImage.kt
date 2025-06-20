@@ -12,6 +12,7 @@ data class CardImagesModule(
     val urls: List<CardImageUrl>,
 ): CardMessageModule()
 
+@Suppress("Unused")
 @Serializable
 enum class CardImageSize {
     @SerialName("small")

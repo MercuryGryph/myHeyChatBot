@@ -1,9 +1,10 @@
+@file:Suppress("Unused")
+
 package cn.mercury9.heychatbotkt.bot.message.card.builder
 
 import cn.mercury9.heychatbotkt.bot.message.card.CardButtonEventType
 import cn.mercury9.heychatbotkt.bot.message.card.CardButtonTheme
 import cn.mercury9.heychatbotkt.bot.message.card.CardSectionButton
-import cn.mercury9.heychatbotkt.bot.message.card.CardSectionImage
 import cn.mercury9.heychatbotkt.bot.message.card.CardSectionMarkdown
 import cn.mercury9.heychatbotkt.bot.message.card.CardSectionModule
 import cn.mercury9.heychatbotkt.bot.message.card.CardSectionParagraph
@@ -11,7 +12,6 @@ import cn.mercury9.heychatbotkt.bot.message.card.CardSectionPlainText
 import cn.mercury9.heychatbotkt.bot.message.card.CardTextContentType
 import cn.mercury9.heychatbotkt.bot.message.card.HeyCardDsl
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlin.text.isEmpty
 
 /**
  * Types: `Text(PlainText | Markdown)` | `Button` | `Image`
@@ -116,8 +116,8 @@ class SectionTextBuilder(
             KotlinLogging.logger {}.warn(e) { "Illegal width of card section text: `$width`. Must be a number or percentage." }
         }
         return when (type) {
-            CardTextContentType.PalinText -> CardSectionPlainText(text, width)
-            CardTextContentType.Markdown -> CardSectionMarkdown(text, width)
+            CardTextContentType.PalinText -> CardSectionPlainText(text, w)
+            CardTextContentType.Markdown -> CardSectionMarkdown(text, w)
         }
     }
 }
@@ -132,7 +132,7 @@ fun CardSectionBuilder.text(
 @HeyCardDsl
 class SectionButtonBuilder(
     var text: String = "",
-    var evevt: CardButtonEventType = CardButtonEventType.Link,
+    var event: CardButtonEventType = CardButtonEventType.Link,
     var value: String = "",
     var theme: CardButtonTheme = CardButtonTheme.Default
 ) {
@@ -142,4 +142,47 @@ class SectionButtonBuilder(
     operator fun String.unaryMinus() {
         text += "${if (text.isEmpty()) "" else "\n"}$this"
     }
+    fun build() = CardSectionButton(
+        text = text,
+        event = event,
+        value = value,
+        theme = theme
+    )
 }
+
+@HeyCardDsl
+fun CardSectionBuilder.button(
+    event: CardButtonEventType,
+    value: String,
+    theme: CardButtonTheme = CardButtonTheme.Default,
+    text: () -> String,
+) = append(SectionButtonBuilder(
+    text = text(),
+    event = event,
+    value = value,
+    theme = theme
+).build())
+
+@HeyCardDsl
+fun CardSectionBuilder.linkButton(
+    value: String,
+    theme: CardButtonTheme = CardButtonTheme.Default,
+    text: () -> String,
+) = append(SectionButtonBuilder(
+    text = text(),
+    event = CardButtonEventType.Link,
+    value = value,
+    theme = theme
+).build())
+
+@HeyCardDsl
+fun CardSectionBuilder.serverButton(
+    value: String,
+    theme: CardButtonTheme = CardButtonTheme.Default,
+    text: () -> String,
+) = append(SectionButtonBuilder(
+    text = text(),
+    event = CardButtonEventType.Server,
+    value = value,
+    theme = theme
+).build())

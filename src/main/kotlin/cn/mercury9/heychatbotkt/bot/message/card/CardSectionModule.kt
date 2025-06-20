@@ -1,3 +1,5 @@
+@file:Suppress("Unused")
+
 package cn.mercury9.heychatbotkt.bot.message.card
 
 import kotlinx.serialization.SerialName

@@ -19,6 +19,7 @@ data class CardButton(
     val theme: CardButtonTheme,
 )
 
+@Suppress("Unused")
 @Serializable
 enum class CardButtonTheme {
     @SerialName("default")

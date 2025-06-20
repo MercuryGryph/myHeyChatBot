@@ -1,9 +1,11 @@
+@file:Suppress("Unused")
+
 package cn.mercury9.heychatbotkt.bot.message.card.builder
 
 import cn.mercury9.heychatbotkt.bot.message.card.CardCountdownMode
 import cn.mercury9.heychatbotkt.bot.message.card.CardCountdownModule
 import cn.mercury9.heychatbotkt.bot.message.card.HeyCardDsl
-import java.util.Date
+import java.util.*
 
 @HeyCardDsl
 class CardCountdownBuilder(

@@ -3,9 +3,9 @@ package cn.mercury9.heychatbotkt.bot
 import cn.mercury9.heychatbotkt.bot.config.HeychatBotConfig
 import cn.mercury9.heychatbotkt.bot.config.HeychatBotConfigger
 import cn.mercury9.heychatbotkt.bot.message.Message
-import cn.mercury9.heychatbotkt.bot.receive.ReceivedMessage
 import cn.mercury9.heychatbotkt.bot.receive.ReceivedBotCommand
 import cn.mercury9.heychatbotkt.bot.receive.ReceivedCommonMessage
+import cn.mercury9.heychatbotkt.bot.receive.ReceivedMessage
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
@@ -62,8 +62,6 @@ class HeychatBot(
         }
     }
 
-    private var stopInThisTurn: Boolean = false
-
     private val logger: KLogger = logger ?: KotlinLogging.logger {}
 
     private val wsPath = Constants.WS_PATH + "?" +
@@ -99,10 +97,6 @@ class HeychatBot(
 
                 logger.info { "Connection closed." }
                 logger.info { "Reconnect in ${config.reconnectDuration}..." }
-
-                if (stopInThisTurn) {
-                    break
-                }
 
                 delay(config.reconnectDuration)
             }
@@ -174,10 +168,5 @@ class HeychatBot(
                 reply?.let { sendMessage(it) }
             }
         }
-    }
-
-    fun stop() {
-        logger.info { "Stopping..." }
-        stopInThisTurn = true
     }
 }

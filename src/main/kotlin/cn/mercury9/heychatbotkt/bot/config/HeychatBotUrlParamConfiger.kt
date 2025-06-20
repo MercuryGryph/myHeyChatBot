@@ -2,6 +2,7 @@ package cn.mercury9.heychatbotkt.bot.config
 
 import cn.mercury9.heychatbotkt.bot.HaychatBotDsl
 
+@Suppress("Unused")
 @HaychatBotDsl
 class HeychatBotUrlParamConfiger {
     internal constructor()
