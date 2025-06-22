@@ -149,6 +149,7 @@ class HeychatBot(
         if (receivedMessage is ReceivedBotCommand) {
             if (receivedMessage.data.botId.toString() != id) {
                 logger.info { "Bot ID not match, skip. (config: $id, received: ${receivedMessage.data.botId})" }
+                return
             }
 
             logger.info { "Handel received BotCommand" }
