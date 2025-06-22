@@ -4,7 +4,7 @@ import cn.mercury9.heychatbotkt.bot.Handler
 import cn.mercury9.heychatbotkt.bot.HeychatBot
 import cn.mercury9.heychatbotkt.bot.command.CommandOption
 import cn.mercury9.heychatbotkt.bot.ellipsis
-import cn.mercury9.heychatbotkt.bot.message.Message
+import cn.mercury9.heychatbotkt.bot.message.ReplyMessage
 import cn.mercury9.heychatbotkt.bot.message.card.Card
 import cn.mercury9.heychatbotkt.bot.message.card.CardSize
 import cn.mercury9.heychatbotkt.bot.message.card.builder.divider
@@ -39,64 +39,63 @@ suspend fun main() {
     bot.start()
 }
 
-private fun Handler.commandPing(received: ReceivedBotCommand, args: Map<String, CommandOption>): Message {
+private fun Handler.commandPing(received: ReceivedBotCommand, args: Map<String, CommandOption>): ReplyMessage {
     Logger.info { "Handle command: ping" }
 
     val payload = args["payload"]?.value
 
-    val msg = Card(size = CardSize.Small) {
-        header { +"PONG" }
+    return ReplyMessage(
+        roomId = received.data.roomBaseInfo.roomId,
+        channelId = received.data.channelBaseInfo.channelId,
+        replyId = received.data.msgId,
+    ) {
+        Card(size = CardSize.Small) {
+            header { +"PONG" }
 
 
-        if (payload != null) {
-            divider { "payload" }
-            section { +payload }
-        }
+            if (payload != null) {
+                divider { "payload" }
+                section { +payload }
+            }
 
-        divider { "info" }
+            divider { "info" }
 
-        section {
-            +markdown {
-                table {
-                    th {
-                        td("")
-                        td("id")
-                        td("name")
-                    }
-                    tr {
-                        td("room")
-                        td(received.data.roomBaseInfo.roomId)
-                        td(received.data.roomBaseInfo.roomName?:"")
-                    }
-                    tr {
-                        td("channel")
-                        td(received.data.channelBaseInfo.channelId)
-                        td(received.data.channelBaseInfo.channelName?:"")
-                    }
-                    tr {
-                        td("sender")
-                        td(received.data.sender.userId.toString())
-                        td(received.data.sender.nickname?:"")
-                    }
-                    tr {
-                        td("message")
-                        td(received.data.msgId)
-                        td { c(received.data.msg.ellipsis(20)) }
+            section {
+                +markdown {
+                    table {
+                        th {
+                            td("")
+                            td("id")
+                            td("name")
+                        }
+                        tr {
+                            td("room")
+                            td(received.data.roomBaseInfo.roomId)
+                            td(received.data.roomBaseInfo.roomName?:"")
+                        }
+                        tr {
+                            td("channel")
+                            td(received.data.channelBaseInfo.channelId)
+                            td(received.data.channelBaseInfo.channelName?:"")
+                        }
+                        tr {
+                            td("sender")
+                            td(received.data.sender.userId.toString())
+                            td(received.data.sender.nickname?:"")
+                        }
+                        tr {
+                            td("message")
+                            td(received.data.msgId)
+                            td { c(received.data.msg.ellipsis(20)) }
+                        }
                     }
                 }
             }
         }
     }
-
-    return Message(
-        msg = msg,
-        roomId = received.data.roomBaseInfo.roomId,
-        channelId = received.data.channelBaseInfo.channelId,
-        replyId = received.data.msgId,
-    )
 }
 
-private fun Handler.commandRand(received: ReceivedBotCommand, args: Map<String, CommandOption>): Message {
+private fun Handler.commandRand(received: ReceivedBotCommand, args: Map<String, CommandOption>): ReplyMessage {
     Logger.info { "Handle command: rand" }
 
     val min = max(0, args["min"]?.value?.toInt() ?: 1)
@@ -112,32 +111,31 @@ private fun Handler.commandRand(received: ReceivedBotCommand, args: Map<String, 
         res += rng.nextInt(min, max)
     }
 
-    val msg = Card(size = CardSize.Small) {
-        header { +"随机数" }
-        section {
-            text {
-                - "范围: `[$min, $max]`"
-                - "数量: `$num`"
+    return ReplyMessage(
+        roomId = received.data.roomBaseInfo.roomId,
+        channelId = received.data.channelBaseInfo.channelId,
+        replyId = received.data.msgId,
+    ) {
+        Card(size = CardSize.Small) {
+            header { +"随机数" }
+            section {
+                text {
+                    - "范围: `[$min, $max]`"
+                    - "数量: `$num`"
+                }
+                if (calcSum) {
+                    text { +"总和: `${res.sum()}`" }
+                }
             }
-            if (calcSum) {
-                text { +"总和: `${res.sum()}`" }
-            }
-        }
-        section {
-            +markdown {
-                ul {
-                    res.forEach {
-                        li { +"$it" }
+            section {
+                +markdown {
+                    ul {
+                        res.forEach {
+                            li { +"$it" }
+                        }
                     }
                 }
             }
         }
     }
-
-    return Message(
-        msg = msg,
-        roomId = received.data.roomBaseInfo.roomId,
-        channelId = received.data.channelBaseInfo.channelId,
-        replyId = received.data.msgId,
-    )
 }

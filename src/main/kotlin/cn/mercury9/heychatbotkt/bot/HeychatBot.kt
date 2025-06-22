@@ -2,7 +2,7 @@ package cn.mercury9.heychatbotkt.bot
 
 import cn.mercury9.heychatbotkt.bot.config.HeychatBotConfig
 import cn.mercury9.heychatbotkt.bot.config.HeychatBotConfigger
-import cn.mercury9.heychatbotkt.bot.message.Message
+import cn.mercury9.heychatbotkt.bot.message.ReplyMessage
 import cn.mercury9.heychatbotkt.bot.receive.ReceivedBotCommand
 import cn.mercury9.heychatbotkt.bot.receive.ReceivedCommonMessage
 import cn.mercury9.heychatbotkt.bot.receive.ReceivedMessage
@@ -68,7 +68,7 @@ class HeychatBot(
             config.wsParam.toPathParamStr() +
             "&token=$token"
 
-    suspend fun sendMessage(msg: Message) {
+    suspend fun sendMessage(msg: ReplyMessage) {
         withContext(Dispatchers.IO) {
             val response = client.post(
                 "https://${Constants.HOST}/${Constants.SEND_PATH}?${config.wsParam.toPathParamStr()}"
@@ -77,7 +77,7 @@ class HeychatBot(
                     append("Content-Type", "application/json;charset=UTF-8")
                     append("token", token)
                 }
-                val body = json.encodeToString(Message.serializer(), msg)
+                val body = json.encodeToString(ReplyMessage.serializer(), msg)
                 logger.debug { "Sending message:\n$body" }
                 setBody(body)
             }

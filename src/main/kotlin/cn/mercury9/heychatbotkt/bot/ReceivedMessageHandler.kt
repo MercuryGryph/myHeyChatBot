@@ -1,13 +1,13 @@
 package cn.mercury9.heychatbotkt.bot
 
 import cn.mercury9.heychatbotkt.bot.command.CommandOption
-import cn.mercury9.heychatbotkt.bot.message.Message
+import cn.mercury9.heychatbotkt.bot.message.ReplyMessage
 import cn.mercury9.heychatbotkt.bot.receive.ReceivedBotCommand
 import cn.mercury9.heychatbotkt.bot.receive.ReceivedCommonMessage
 
 interface ReceivedMessageHandler {
-    fun handleBotCommand(receivedMessage: ReceivedBotCommand): Message? = null
-    fun handleCommonMessage(receivedMessage: ReceivedCommonMessage): Message? = null
+    fun handleBotCommand(receivedMessage: ReceivedBotCommand): ReplyMessage? = null
+    fun handleCommonMessage(receivedMessage: ReceivedCommonMessage): ReplyMessage? = null
 }
 
 @DslMarker
@@ -16,11 +16,11 @@ annotation class MessageHandlerDsl
 @MessageHandlerDsl
 class Handler: ReceivedMessageHandler {
     private val commandHandlers
-        = mutableMapOf<String, (received: ReceivedBotCommand, args: Map<String, CommandOption>)->Message?>()
+        = mutableMapOf<String, (received: ReceivedBotCommand, args: Map<String, CommandOption>)->ReplyMessage?>()
 
-    private var messageHandlers: (received: ReceivedCommonMessage)->Message? = { null }
+    private var messageHandlers: (received: ReceivedCommonMessage)->ReplyMessage? = { null }
 
-    override fun handleBotCommand(receivedMessage: ReceivedBotCommand): Message? {
+    override fun handleBotCommand(receivedMessage: ReceivedBotCommand): ReplyMessage? {
         val name = receivedMessage.data.commandInfo.name
         val args: MutableMap<String, CommandOption> = mutableMapOf()
 
@@ -33,17 +33,17 @@ class Handler: ReceivedMessageHandler {
         return commandHandlers[name]?.invoke(receivedMessage, args)
     }
 
-    override fun handleCommonMessage(receivedMessage: ReceivedCommonMessage): Message? = messageHandlers(receivedMessage)
+    override fun handleCommonMessage(receivedMessage: ReceivedCommonMessage): ReplyMessage? = messageHandlers(receivedMessage)
 
     fun message(
-        handler: (received: ReceivedCommonMessage)->Message?
+        handler: (received: ReceivedCommonMessage)->ReplyMessage?
     ) {
         messageHandlers = handler
     }
 
     fun command(
         name: String,
-        handler: (received: ReceivedBotCommand, args: Map<String, CommandOption>)->Message?
+        handler: (received: ReceivedBotCommand, args: Map<String, CommandOption>)->ReplyMessage?
     ) {
         commandHandlers[name] = handler
     }

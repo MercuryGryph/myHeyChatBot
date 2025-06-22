@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class Message(
+data class ReplyMessage(
     val msg: String,
 
     @SerialName("msg_type")
@@ -88,6 +88,30 @@ data class Message(
         mentionChannelId: String = "",
     ) : this(
         msg = Json.encodeToString(Cards.serializer(), msg),
+        msgType = MessageType.Card,
+        roomId = roomId,
+        channelId = channelId,
+        heychatAckId = heychatAckId,
+        replyId = replyId,
+        channelType = channelType,
+        addition = addition,
+        atUserId = atUserId,
+        atRoleId = atRoleId,
+        mentionChannelId = mentionChannelId,
+    )
+    constructor(
+        roomId: String,
+        channelId: String,
+        heychatAckId: String? = null,
+        replyId: String? = null,
+        channelType: Int? = null,
+        addition: String? = "",
+        atUserId: String = "",
+        atRoleId: String = "",
+        mentionChannelId: String = "",
+        msg: ()->Cards,
+    ) : this(
+        msg = Json.encodeToString(Cards.serializer(), msg()),
         msgType = MessageType.Card,
         roomId = roomId,
         channelId = channelId,

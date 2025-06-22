@@ -2,7 +2,11 @@ package cn.mercury9.myheychatbot.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import java.io.File
+import kotlin.io.path.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.exists
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 import kotlin.system.exitProcess
 
 @Serializable
@@ -17,10 +21,11 @@ fun loadConfig(): Config {
         encodeDefaults = true
         ignoreUnknownKeys = true
     }
-    val file = File("config.json")
+
+    val file = Path("config.json")
 
     if (!file.exists()) {
-        file.createNewFile()
+        file.createFile()
         val config = Config()
         file.writeText(json.encodeToString(Config.serializer(), config))
         println("Please edit the config JSON file.")
